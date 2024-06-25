@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        body{
+            background-image: url(./328544840_189218753716453_1412612309102857827_n.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 55%;
+            background-color: rgb(219, 153, 153);
+            border: 2px solid;
+            margin-bottom: 3rem;
+            margin-left: 4rem;
+            margin-top: 4rem;
+        }
+
+        td,
+        th {
+            border: 1px solid;
+            padding: 8px;
+        }
+
+        td {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        th {
+            font-size: 20px;
+            background-color: rgb(139, 40, 36);
+        }
+        ul{
+            list-style: none;
+        }
+
+        .kaydet, .sil{
+            padding: 12px;
+            margin-left: 3rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 20px;
+
+            
+        }
+        .butonlar{
+            margin-left: 14%;
+            margin-bottom: 3rem;
+        }
+        h2{
+            margin-left: 20%;
+            font-size: 40px;
+            color: rgb(228, 141, 138);
+        }
+
+        ul{
+            color: white;
+            font-size: 25px;
+            border: 1px solid white;
+            width: 70%;
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+            padding: 2rem;
+        }
+        
+    </style>
+
+    <script>
+        // Checkbox durumlarını kaydet
+        function saveCall() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            let results = [];
+
+            checkboxes.forEach((checkbox, index) => {
+                results.push({
+                    checked: checkbox.checked,
+                    label: checkbox.closest('tr').querySelector('td').innerText
+                });
+                // Tüm checkboxları işaretlerini kaldır
+                checkbox.checked = false;
+            });
+
+            // Önceki görüşme sonuçlarını al
+            let calls = JSON.parse(localStorage.getItem('calls')) || [];
+            // Yeni görüşme sonuçlarını ekle
+            calls.push(results);
+            // Güncellenmiş görüşme sonuçlarını sakla
+            localStorage.setItem('calls', JSON.stringify(calls));
+
+            // Görüşme sonuçlarını güncelle
+            updateCallHistory();
+        }
+
+        // Görüşme geçmişini güncelle
+        function updateCallHistory() {
+            const callHistory = document.getElementById('callHistory');
+            callHistory.innerHTML = '';
+
+            let calls = JSON.parse(localStorage.getItem('calls')) || [];
+            calls.forEach((call, index) => {
+                const listItem = document.createElement('li');
+                const callDetails = document.createElement('ul');
+                call.forEach(item => {
+                    const detailItem = document.createElement('li');
+                    detailItem.textContent = `${item.label}=====>   ${item.checked ? 'Yapıldı' : 'Yapılmadı'}`;
+                    callDetails.appendChild(detailItem);
+                });
+                listItem.textContent = `Görüşme ${index + 1}:`;
+                listItem.appendChild(callDetails);
+                callHistory.appendChild(listItem);
+            });
+        }
+
+        // Görüşme geçmişini sil
+        function clearHistory() {
+            localStorage.removeItem('calls');
+            updateCallHistory();
+        }
+
+        // Sayfa yüklendiğinde geçmişi güncelle
+        window.onload = function () {
+            updateCallHistory();
+        }
+    </script>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>Görevler</th>
+            <th>Kontrol</th>
+        </tr>
+        <tr>
+            <td>Laune/Stimme</td>
+            <td><input type="checkbox" name="checkbox1"></td>
+        </tr>
+        <tr>
+            <td>AP Ermittiung</td>
+            <td><input type="checkbox" name="checkbox2"></td>
+        </tr>
+        <tr>
+            <td>Bezug zum Googleprofil</td>
+            <td><input type="checkbox" name="checkbox3"></td>
+        </tr>
+        <tr>
+            <td>Bezug zu Rezensionen</td>
+            <td><input type="checkbox" name="checkbox4"></td>
+        </tr>
+        <tr>
+            <td>Namentliche ansprach 3 mal</td>
+            <td><input type="checkbox" name="checkbox5"></td>
+        </tr>
+        <tr>
+            <td>Freundlichkeit</td>
+            <td><input type="checkbox" name="checkbox6"></td>
+        </tr>
+        <tr>
+            <td>Negativ Auswirkung</td>
+            <td><input type="checkbox" name="checkbox7"></td>
+        </tr>
+        <tr>
+            <td>Positiv Auswirkung</td>
+            <td><input type="checkbox" name="checkbox8"></td>
+        </tr>
+        <tr>
+            <td>Abschlussfrage</td>
+            <td><input type="checkbox" name="checkbox9"></td>
+        </tr>
+        <tr>
+            <td>Struktur Verkaufsgspr</td>
+            <td><input type="checkbox" name="checkbox10"></td>
+        </tr>
+        <tr>
+            <td>Bonus oder Gutschein verwendet</td>
+            <td><input type="checkbox" name="checkbox11"></td>
+        </tr>
+        <tr>
+            <td>Minimumbetrag Angeboten</td>
+            <td><input type="checkbox" name="checkbox12"></td>
+        </tr>
+        <tr>
+            <td>Prozedur erklaert</td>
+            <td><input type="checkbox" name="checkbox13"></td>
+        </tr>
+        <tr>
+            <td>Wenn / Könnte / Sollte</td>
+            <td><input type="checkbox" name="checkbox14"></td>
+        </tr>
+    </table>
+
+    <div class="butonlar">
+    <button class="kaydet" onclick="saveCall()">Görüşmeyi Kaydet</button>
+    <button class="sil" onclick="clearHistory()">Geçmişi Sil</button>
+    </div>
+    
+    <h2>Görüşme Geçmişi</h2>
+    <ul id="callHistory"></ul>
+</body>
+
+</html>
